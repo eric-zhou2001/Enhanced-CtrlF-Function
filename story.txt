@@ -1,2 +1,5 @@
 Hello there beautiful people. This is some sample text so that I don't fail my CS class.
 This is the first paragraph. I hope you enjoyed my incredible writing skills. I should get published. (Franklin's paragraph)
+This is indeed the second paragraph. I thought about sabotaging Franklin and cause him to fail his CS class
+(or, at the very least, cause him to fail this assignment) by not doing this assignment, but I guess it's too 
+late for that. (Eric's paragraph contribution)
