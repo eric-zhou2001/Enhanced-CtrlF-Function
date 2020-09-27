@@ -12,6 +12,7 @@ import java.util.ArrayList;
 
 public class DataWrangler1<KeyType, ValueType> {
   private ArrayList<HashNode<KeyType, ValueType>> hashNodeList;
+  private String textToProcess;
   private File file;
   private ArrayList<String> uniqueWords;
   private ArrayList<Integer> wordOccurrences;
@@ -26,6 +27,14 @@ public class DataWrangler1<KeyType, ValueType> {
   public DataWrangler1(File file) {
     this.hashNodeList = new ArrayList<>();
     this.file = file;
+    this.uniqueWords = new ArrayList<>();
+    this.wordOccurrences = new ArrayList<>();
+  }
+  
+  public DataWrangler1(String textToProcess) {
+    this.hashNodeList = new ArrayList<>();
+    this.file = null;
+    this.textToProcess = textToProcess;
     this.uniqueWords = new ArrayList<>();
     this.wordOccurrences = new ArrayList<>();
   }
@@ -45,12 +54,18 @@ public class DataWrangler1<KeyType, ValueType> {
   public void getUniqueWords() {
     Scanner scnr = null;
     
-    try {
-      scnr = new Scanner(file); // create a scanner for the .txt file
-    } 
-    catch (FileNotFoundException e) {
-      e.printStackTrace();
+    if (file != null) {
+      try {
+        scnr = new Scanner(file); // create a scanner for the .txt file
+      } 
+      catch (FileNotFoundException e) {
+        e.printStackTrace();
+      }
     }
+    else {
+      scnr = new Scanner(textToProcess);
+    }
+    
     
     while (scnr.hasNextLine()) {
       String line = scnr.nextLine(); // read each line in the file
