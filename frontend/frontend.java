@@ -1,3 +1,11 @@
+// --== CS400 File Header Information ==--
+// Name: Eric Zhou
+// Email: ezhou22@wisc.edu
+// Team: IG
+// TA: Mu Cai
+// Lecturer: Florian Heimerl
+// Notes to Grader: Hello there!
+
 import java.util.Scanner;
 
 public class frontend {
@@ -18,12 +26,12 @@ public class frontend {
     // This is what we "run" the program with. It's a while(true) loop that 
     // will always run and wait upon user response.
     public static void main(String[] args) {
-//        DataWrangler1 dataProcess;
+        DataWrangler1<String, Integer> dataProcess = null;
         String br = "----------------------------------------------";
-        String text ="";
         String command = "";
         System.out.println("Welcome to Enhanced Control-F!");
         while (true) {
+            String text ="";
             System.out.println(br);
             System.out.println("Please enter a command: ");
             System.out.println("\tEntering \"h\" will bring up a menu of options.");
@@ -61,8 +69,8 @@ public class frontend {
                 if (text.replaceAll("\\s+","").matches("^[a-zA-z]*$")) {
                     System.out.println("Processing text: " + text);
                  // Creates the table by doing this.
-//                  dataProcess = new DataWrangler1(text);
-                  // dataProcess.getUniqueWords();
+                  dataProcess = new DataWrangler1(text);
+                  dataProcess.getUniqueWords();
                 } else {
                     System.out.println("Error! Please enter only alphabetical"
                         + " characters!");
@@ -78,6 +86,7 @@ public class frontend {
                 }
                 if (word.matches("[a-zA-z]+")) {
                     System.out.println("Searching for word: " + word);
+// This is where we would search table.
                     // Search the table.
 //                    String searchResult = table.search(word);
 //                    System.out.println(searchResult);
@@ -87,7 +96,9 @@ public class frontend {
                 }
             } else if (command.equals("p")) {
                 // access table method.
-//                dataProcess.printHashNodeList();
+                if (dataProcess != null) {
+                    dataProcess.printHashNodeList();
+                }
             }
         }
         
