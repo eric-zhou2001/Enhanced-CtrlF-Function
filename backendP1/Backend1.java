@@ -1,3 +1,10 @@
+// --== CS400 File Header Information ==--
+// Name: Pintao Zou
+// Email: fwang263@wisc.edu
+// Team: IG
+// TA: Mu Cai
+// Lecturer: Florian Heimerl
+// Notes to Grader: <optional extra notes>
 import java.util.ArrayList;
 import java.util.NoSuchElementException;
 
