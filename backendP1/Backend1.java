@@ -1,0 +1,39 @@
+import java.util.ArrayList;
+import java.util.NoSuchElementException;
+
+public class Backend1 {
+    DataWrangler1<String, Integer>data;
+    HashTableMap<String, Integer>table;
+    public Backend1(){
+        this.data=new DataWrangler1<>();
+        this.table=new HashTableMap<>();
+    }
+    public Backend1(DataWrangler1<String, Integer>data){//receive data from data wrangler and put them into the hash table
+        this.data=data;
+        for(int i=0;i<this.data.uniqueWords.size();i++){
+            this.table.put(this.data.uniqueWords.get(i),this.data.getWordOccurrences.get(i));
+            //note: there should be a function to get uniqueWords arraylist in class DataWrangler1 as it is private
+        }
+    }
+    public Integer search(String goal){
+        try{
+            return this.table.get(goal);
+        }catch (NoSuchElementException e) {
+            System.out.println("No Such Word!");
+            return 0;
+        }
+    }
+    public void input(String newWord){
+        if(this.table.containsKey(newWord)){//if the word exists, add 1 to its occurrence
+            Integer tempValue=this.table.get(newWord);
+            this.getHashNode(newWord).setValue(tempValue+1);
+            //we have to write a new function to get the hash node because get() only return an integer
+        }
+        else{//if the word doesn't exist, put a new hash node into the table
+            this.table.put(newWord,1);
+        }
+    }
+    public void print(){
+        //there should be a function to iterate our hash table in HashTableMap.java
+    }
+}
