@@ -1,6 +1,6 @@
 // --== CS400 File Header Information ==--
 // Name: Pintao Zou
-// Email: fwang263@wisc.edu
+// Email: pzou4@wisc.edu
 // Team: IG
 // TA: Mu Cai
 // Lecturer: Florian Heimerl
