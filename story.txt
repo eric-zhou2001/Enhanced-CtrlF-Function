@@ -1,2 +1,5 @@
 Hello there beautiful people. This is some sample text so that I don't fail my CS class.
 This is the first paragraph. I hope you enjoyed my incredible writing skills. I should get published. (Franklin's paragraph)
+
+This is the second paragraph. I am writing this on behalf of Franklin, for he is the most beautiful
+human being in the world. So beautiful that, I, Eric Zhou, cannot believe how beautiful he is. My goodness.
