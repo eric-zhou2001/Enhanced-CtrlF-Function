@@ -53,23 +53,6 @@ public class TestEnhancedCtrlF {
     }
   }
   
-  public static boolean testOddCharacters() {
-    DataWrangler1<String, Integer> data = new DataWrangler1("! # @ $ @ ! @@ $ @@ $ $ % ^ ** ( ! \\ ");
-    Backend1 test = new Backend1(data);
-    if(test.search("!") == 3) {
-      test.input("\\");
-      if(test.search("\\")==2) {
-        return true;   
-      }
-      else {
-        return false;
-      }
-    }
-    else {
-      return false;
-    }
-  } 
-  
   public static void main(String[] args) {
     if(testHashTable()) {
       System.out.println("Basic hash table test passed");
@@ -77,23 +60,11 @@ public class TestEnhancedCtrlF {
     else {
       System.out.println("Basic hash table test failed");
     }
-    if(testInput()) {
-      System.out.println("Input test passed");
-    }
-    else {
-      System.out.println("Input test failed");
-    }
     if(testSearchNoWord()) {
       System.out.println("Null search test passed");
     }
     else {
       System.out.println("Null search test failed");
-    }
-    if(testOddCharacters()) {
-      System.out.println("Test with odd characters passed");
-    }
-    else {
-      System.out.println("Test with odd characters failed");
     }
   }
 }
