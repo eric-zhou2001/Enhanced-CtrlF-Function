@@ -51,7 +51,7 @@ public class DataWrangler1<KeyType, ValueType> {
      - More than one letter
      - Not case sensitive (set all words to lowercase)
    */
-  public void getUniqueWords() {
+  public void countUniqueWords() {
     Scanner scnr = null;
     
     if (file != null) {
@@ -117,13 +117,9 @@ public class DataWrangler1<KeyType, ValueType> {
   public ArrayList<Integer> getWordOccurrences() {
     return wordOccurrences;
   }
-
-
-  public static void main(String[] args) {
-    DataWrangler1<String, Integer> testData = new DataWrangler1();
-    
-    testData.getUniqueWords();
-    testData.printHashNodeList();
-    
+ 
+  public ArrayList<String> getUniqueWords() {
+      return this.uniqueWords;
   }
+
 }

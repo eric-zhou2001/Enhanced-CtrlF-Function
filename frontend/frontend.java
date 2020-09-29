@@ -27,8 +27,10 @@ public class frontend {
     // will always run and wait upon user response.
     public static void main(String[] args) {
         DataWrangler1<String, Integer> dataProcess = null;
+        Backend1 table = null;
         String br = "----------------------------------------------";
         String command = "";
+        boolean textInput = false;
         System.out.println("Welcome to Enhanced Control-F!");
         while (true) {
             String text ="";
@@ -70,7 +72,9 @@ public class frontend {
                     System.out.println("Processing text: " + text);
                  // Creates the table by doing this.
                   dataProcess = new DataWrangler1(text);
-                  dataProcess.getUniqueWords();
+                  dataProcess.countUniqueWords();
+                  table = new Backend1(dataProcess);
+                  textInput = true;
                 } else {
                     System.out.println("Error! Please enter only alphabetical"
                         + " characters!");
@@ -78,6 +82,11 @@ public class frontend {
                 }
             } else if (command.equals("s")) {
                 // Search command
+                if (!textInput) {
+                    System.out.println("Error! Please enter text (t) before "
+                        + "trying to search for a word!");
+                    continue;
+                }
                 System.out.println("Enter the word to search here: ");
                 String word = input.nextLine();
                 if (word.equals("") || word.split(" ").length > 1) {
@@ -88,8 +97,8 @@ public class frontend {
                     System.out.println("Searching for word: " + word);
 // This is where we would search table.
                     // Search the table.
-//                    String searchResult = table.search(word);
-//                    System.out.println(searchResult);
+                    Integer searchResult = table.search(word);
+                    System.out.println(word + " : " + searchResult);
                 } else {
                     System.out.println("Error! Word is not valid. Please enter"
                         + " only characters.");

@@ -3,10 +3,13 @@ public class TestEnhancedCtrlF {
   
   //Basic test to check if the hash table works correctly
   public static boolean testHashTable() {
-    DataWrangler1<String,Integer> data = new DataWrangler1("This is a test for our advanced control f function."
+    DataWrangler1<String, Integer> data = new DataWrangler1("This is a test for our advanced control f function."
         + "There will be many tests, including a test of the print function, a test of the chaining, and an"
         + "overall test of the Hash Table.");
+    data.countUniqueWords();
     Backend1 test = new Backend1(data);
+    data.printHashNodeList();
+    System.out.println(test.search("test"));
     if(test.search("test") == 4) {
         return true;
     }
@@ -72,7 +75,7 @@ public class TestEnhancedCtrlF {
       System.out.println("Basic hash table test passed");
     }
     else {
-      System.out.println("Basic has table test failed");
+      System.out.println("Basic hash table test failed");
     }
     if(testInput()) {
       System.out.println("Input test passed");
