@@ -8,7 +8,7 @@ public class TestEnhancedCtrlF {
         + "overall test of the Hash Table.");
     data.countUniqueWords();
     Backend1 test = new Backend1(data);
-    data.printHashNodeList();
+//    data.printHashNodeList();
     System.out.println(test.search("test"));
     if(test.search("test") == 4) {
         return true;
