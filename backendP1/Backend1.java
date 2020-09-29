@@ -40,7 +40,7 @@ public class Backend1 {
         if(this.table.containsKey(newWord)){//if the word exists, add 1 to its occurrence
             Integer tempValue=this.table.get(newWord);
             for(int i=0;i<data.getHashNodeList().size();i++){
-                if(data.getHashNodeList().get(i).getKey()==newWord){//update the hash node list in data process
+                if(data.getHashNodeList().get(i).getKey().equals(newWord)){//update the hash node list in data process
                     data.getHashNodeList().get(i).setValue(tempValue+1);
                     break;
                 }
