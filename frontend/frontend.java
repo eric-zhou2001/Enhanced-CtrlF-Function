@@ -5,11 +5,20 @@
 // TA: Mu Cai
 // Lecturer: Florian Heimerl
 // Notes to Grader: Hello there!
-
 import java.util.Scanner;
 
+/**
+ * Front end class. Serves as the "server" constantly running the command and waiting
+ * for user input. The user can type "h" for more information. Main runs via infinite
+ * loop waiting for user commands.
+ * @author Eric Zhou
+ */
 public class frontend {
     
+    /**
+     * helpFunction() is called whenever the user types in the help command "h." Displays
+     * information about commands.
+     */
     private static void helpFunction() {
         System.out.println("Welcome to Enhanced Control-F Function!");
         System.out.println("We hope to provide additional insight into"
@@ -22,16 +31,24 @@ public class frontend {
             + "Additionally, if it appears, provides number of times it appears.");
         System.out.println("\tp - Print command. Prints each word in the page, as "
             + "well as the number of appearances of each word.");
+        System.out.println("\tx - Exit command. Closes out of application.");
     }
-    // This is what we "run" the program with. It's a while(true) loop that 
-    // will always run and wait upon user response.
+    
+    /**
+     * Main method. Runs the entire program. Waits for user input, creating hash tables
+     * each time the user enters code. See help function for available commands.
+     */
     public static void main(String[] args) {
         DataWrangler1<String, Integer> dataProcess = null;
         Backend1 table = null;
         String br = "----------------------------------------------";
         String command = "";
         boolean textInput = false;
+
+
         System.out.println("Welcome to Enhanced Control-F!");
+
+        // Beginning of program.
         while (true) {
             String text ="";
             System.out.println(br);
@@ -39,6 +56,7 @@ public class frontend {
             System.out.println("\tEntering \"h\" will bring up a menu of options.");
             Scanner input = new Scanner(System.in);
             
+            // Reads user input, trimming + converting to lower case.
             command = input.nextLine().trim().toLowerCase();
             
             // Test case if user enters null (somehow?)
@@ -66,6 +84,7 @@ public class frontend {
                 helpFunction();
                 continue;
             } else if (command.equals("t")) {
+                // Will receive user input text and store in hash table.
                 System.out.println("Enter your text to be analyzed here: ");
                 text += input.nextLine();
                 if (text.replaceAll("\\s+","").matches("^[a-zA-z]*$")) {
@@ -83,6 +102,8 @@ public class frontend {
             } else if (command.equals("s")) {
                 // Search command
                 if (!textInput) {
+                    // Must have a hash table already created to search, otherwise
+                    // NPE.
                     System.out.println("Error! Please enter text (t) before "
                         + "trying to search for a word!");
                     continue;
@@ -94,9 +115,8 @@ public class frontend {
                     continue;
                 }
                 if (word.matches("[a-zA-z]+")) {
+                    // Regex to ensure that each word is alphabetical.
                     System.out.println("Searching for word: " + word);
-// This is where we would search table.
-                    // Search the table.
                     Integer searchResult = table.search(word);
                     System.out.println(word + " : " + searchResult);
                 } else {
@@ -108,6 +128,9 @@ public class frontend {
                 if (dataProcess != null) {
                     dataProcess.printHashNodeList();
                 }
+            } else if (command.equals("x")) {
+                // exit command. program shuts down.
+                return;
             }
         }
         
