@@ -1,260 +1,228 @@
 // --== CS400 File Header Information ==--
-// Name: Franklin Wang
-// Email: fwang263@wisc.edu
+// Name: <Sid .S. Khirwar
+// Email: skhirwar@wisc.edu
 // Team: IG
 // TA: Mu Cai
-// Lecturer: Florian Heimerl
+// Lecturer: Gary Dahl
 // Notes to Grader: <optional extra notes>
 
-import java.util.NoSuchElementException;
 import java.util.LinkedList;
+import java.util.NoSuchElementException;
 
-public class HashTableMap<KeyType, ValueType> implements MapADT<KeyType, ValueType> {
-  private LinkedList<HashNode<KeyType, ValueType>>[] table;
-  
-  /**
-   * Constructor used when user specifies table size.
-   * 
-   * @param capacity
-   */
-  public HashTableMap(int capacity) {
-    if (capacity < 1) { // create table of default size if given capacity < 1
-      this.table = new LinkedList[10];
-    }
-    else {
-      this.table = new LinkedList[capacity];
-    }
-  }
-  
-  /**
-   * Default constructor. Sets table size to 10 by default.
-   */
-  public HashTableMap() {// with default capacity = 10
-    this.table = new LinkedList[10];
-  }
-  
-  /**
-   * Generates hash index for a key-value pair. Hash code is calculated using java's .hashCode()
-   * function, then taking the absolute value of the generated hash code.
-   * @return hash index for key-value pair
-   */
-  private int calcHashIndex(KeyType key) {
-    int keyHashCode = Math.abs(key.hashCode());
-    int hashIndex = keyHashCode % table.length; // mod by the table size to generate hashIndex
-    
-    return hashIndex;
-  }
+public class HashTableMap<KeyType, ValueType> implements MapADT<KeyType, ValueType>{
 
-  /**
-   * Hashes data elements into the table.
-   */
-  private void hashIntoTable(KeyType key, ValueType value) {
-    int hashIndex = calcHashIndex(key);
-    HashNode<KeyType, ValueType> newHashNode = new HashNode<KeyType, ValueType>(key, value);
+    private int capacity;
+    private int size;
+    private LinkedList<HashPair<KeyType,ValueType>> hashTable[];
     
-    if (table[hashIndex] == null) {
-      table[hashIndex] = new LinkedList<HashNode<KeyType, ValueType>>();
+    public HashTableMap(int capacity) {
+        this.capacity = capacity;
+        this.size = 0;
+        hashTable = new LinkedList[capacity];
+       // for(int i = 0; i < capacity; i++) {
+       //     hashTable[i].add(null);
+       // }
     }
     
-    table[hashIndex].add(newHashNode);
-  }
-
-  /**
-   * Adds new element to array. Returns true when successfully storing a new pair, false when key 
-   * already exists in table. Calls hashCode() method to calculate hash code of new value. Stores key 
-   * and value inside of array element. 
-   * 
-   * @return true if successfully storing new pair, false when pair exists already
-   */
-  @Override
-  public boolean put(KeyType key, ValueType value) {
-    
-    if (containsKey(key)) {
-      return false;
+    public HashTableMap() {
+        this.capacity = 10;
+        this.size = 0;
+        hashTable = new LinkedList[capacity];
+       // for(int i = 0; i < capacity; i++) {
+        //    hashTable[i].add(null);
+       // }
     }
-    else {
-      hashIntoTable(key, value);
-      
-      // grow hash table if load factor >= 80%
-      double size = size();
-      double capacity = table.length;
-      double loadFactor = size/capacity;
-      if (loadFactor >= .8) {
-        growTable();
-      }
-      
-      return true;
-    }
-  }
-
-  /**
-   * Grows the table when load factor >= 80%. Creates a new table with double the capacity of the old
-   * table. Rehashes each value, copying into the new table. Finally sets old table reference to new
-   * table instance.
-   */
-  private void growTable() {
-    LinkedList<HashNode<KeyType, ValueType>>[] newTable = new LinkedList[table.length * 2];
     
-    for (int i = 0; i < table.length; ++i) {
-      if (table[i] != null) {
-        for (int j = 0; j < table[i].size(); ++j) { // rehash every linkedNode
-          HashNode curNode = table[i].get(j);
-          KeyType curNodeKey = (KeyType) curNode.getKey();
-          
-          int newIndex = calcHashIndex(curNodeKey); // calculate new hash index
-          
-          if (newTable[newIndex] == null) {
-            newTable[newIndex] = new LinkedList<HashNode<KeyType, ValueType>>();
-          }
-          
-          newTable[newIndex].add(curNode);
+    int hashCode(KeyType key) {
+        String hashString = "" + key;
+        int hashIntermediate = hashString.hashCode();
+        int hashNo = java.lang.Math.abs(hashIntermediate % capacity);
+        return hashNo;
+    }
+    
+    private void doublerTable() {
+        if(size >= (0.8 * capacity)) {
+            LinkedList<HashPair<KeyType,ValueType>> tempHashTable[] = this.hashTable;
+            LinkedList<HashPair<KeyType,ValueType>> tempHashTable2[] = new LinkedList[2*capacity];
+            
+            this.capacity = 2*(this.capacity);
+            this.hashTable = tempHashTable2;
+            
+           // tempSize= size;
+            this.size = 0;
+            //size = tempSize;
+            //for(int i = 0; i < capacity; i++) {
+            //    hashTable[i].add(null);
+          //  }
+            for(int i = 0; i < tempHashTable.length; i++) {
+                if(tempHashTable[i] == null) {
+                    hashTable[i] = null;
+                }else {
+                    for( HashPair<KeyType, ValueType> leadingPair : tempHashTable[i]) {
+                        while (leadingPair != null) 
+                        {   
+                             
+                            put(leadingPair.key, leadingPair.value);
+                            leadingPair = leadingPair.next;
+                        } 
+                    }
+               }
+            }
         }
-      }
     }
     
-    table = newTable;
-  }
-
-  /**
-   * Finds value using key (call hash index function) and returns the value corresponding to that
-   * particular key.
-   * 
-   * @return value corresponding to the key
-   * @throws NoSuchElementException if key does not exist within table
-   */
-  @Override
-  public ValueType get(KeyType key) throws NoSuchElementException {
-    int hashIndex = calcHashIndex(key);
-    
-    if (containsKey(key)) {
-      return loopToNode(key).getValue();
-    }
-    else {
-      throw new NoSuchElementException();
-    }
-    
-  }
-  
-  private HashNode<KeyType, ValueType> loopToNode(KeyType key) {
-    int hashIndex = calcHashIndex(key);
-    
-    if (table[hashIndex] == null) { // return null when table doesn't exist
-      return null;
+    public boolean put(KeyType key, ValueType value){
+        int index = hashCode(key);
+        if (hashTable[index] == null)
+        {
+            hashTable[index]= new LinkedList<HashPair<KeyType, ValueType>>();
+            HashPair<KeyType, ValueType> head = new HashPair<KeyType, ValueType>(key, value); 
+            head.next = null;
+            hashTable[index].add(head);
+        }
+        else
+        {
+        HashPair<KeyType, ValueType> head = hashTable[index].getFirst();
+        while(head != null) {
+            if(head.key.equals(key)) {
+                return false;
+            }
+            head = head.next;
+        }
+        head = hashTable[index].getFirst();
+        HashPair<KeyType, ValueType> newPair = new HashPair<KeyType, ValueType>(key, value); 
+        newPair.next = head; 
+        hashTable[index].addFirst(newPair);
+        }
+        size++;
+        doublerTable();
+        return true;
     }
     
-    for (int i = 0; i < table[hashIndex].size(); ++i) {
-      HashNode<KeyType, ValueType> curNode = table[hashIndex].get(i);
-      
-      if (curNode.getKey().equals(key)) {
-        return curNode;
-      }
+    public ValueType get(KeyType key) {
+        int index = hashCode(key);
+        if(hashTable[index] == null) {
+            throw new NoSuchElementException(); 
+        }
+        else {
+            HashPair<KeyType, ValueType> head = hashTable[index].getFirst();
+            while (head != null) 
+            { 
+                if (head.key.equals(key)) { 
+                    return head.value; 
+                }
+                head = head.next; 
+            } 
+        }
+    
+        return null;
     }
     
-    return null;
-  }
-
-  /**
-   * Returns number of key-value pairs stored in collection (NOT SIZE OF TABLE).
-   * Loops through every array element, checking for a non-null value. If the value is not null, 
-   * get size of LinkedList, which is number of total nodes in the list. Adds this number to counter
-   * of total nodes in the entire list.
-   * 
-   * @return total number of key-value pairs (number of HashNodes)
-   */
-  @Override
-  public int size() {
-    int numNodes = 0;
-    
-    for (int i = 0; i < table.length; ++i) { // loop through every array element
-      if (table[i] == null) {
-        continue;
-      }
-      else {
-        numNodes += table[i].size(); // add number of linkedNodes
-      }
+    public boolean containsKey(KeyType key) {
+        int index = hashCode(key);
+        if(hashTable[index] == null) {
+            return false; 
+        }
+        else {
+            HashPair<KeyType, ValueType> head = hashTable[index].getFirst();
+            while (head != null) 
+            { 
+                if (head.key.equals(key)) { 
+                    return true; 
+                }
+                head = head.next; 
+            } 
+        }
+        return false;
     }
     
-    return numNodes;
-  }
-  
-  /**
-   * Returns the number of buckets of the table.
-   * 
-   * @return total number of buckets in the table.
-   */
-  public int capacity() {
-    return table.length;
-  }
-
-  /**
-   * Checks to see whether the value exists in the array for a certain key. (call hash index function)
-   * 
-   * @return true when the value exists in array, false otherwise
-   */
-  @Override
-  public boolean containsKey(KeyType key) {
-    int hashIndex = calcHashIndex(key);
-    
-    if (table[hashIndex] == null) {
-      return false; // since LinkedList doesn't exist, key doesn't either
+    public ValueType remove(KeyType key) {
+       /* ValueType temp = null;
+        int index = hashCode(key);
+        if(hashTable[index] == null) {
+            return null;
+        }else {
+            HashPair<KeyType, ValueType> head = hashTable[index].getFirst();
+            HashPair<KeyType, ValueType> prevPair = null;
+            while(head != null) {
+                if(head.key.equals(key)) {
+                    break;
+                }
+                else {
+                    prevPair = head;
+                    head = head.next;
+                }
+            }
+            if(head == null) {
+                return null;
+           }
+            if(prevPair != null) {
+                prevPair.next = head.next;
+                temp = head.value;
+                head.key = null;
+                head.value = null;
+           }
+            else {
+                System.out.println(index);
+                System.out.println(head);
+                System.out.println(head.next);
+                if (head.next == null) {
+                    temp = head.value;
+                    head.key = null;
+                    head.value = null;
+               }else {
+                   hashTable[index].set(index, head.next);
+                   temp = head.value;
+                   head.key = null;
+                   head.value = null;
+                   
+                }
+            }
+           size--;
+           return temp;
+        }*/
+        if(!containsKey(key)) {
+            return null;
+        }
+        
+        ValueType val1 = null;
+        
+        for(int i = 0; i < capacity; i++) {
+            if(hashTable[i] != null) {
+                for(int j = 0; j < hashTable[i].size();j++){
+                    HashPair<KeyType, ValueType> leadingPair = (HashPair) hashTable[i].get(j);
+                    if(leadingPair.key == key) {
+                        if(leadingPair.value != null) {
+                            val1 = leadingPair.value;
+                            leadingPair.key = null;
+                            leadingPair.value = null;
+                        }
+                        else {
+                            leadingPair = null;
+                        }
+                    }
+                }
+            }
+        }
+        size--;
+        return val1;
     }
     
-    HashNode<KeyType, ValueType> curNode = loopToNode(key);
+    public void clear() {
+        hashTable = new LinkedList[capacity];
+        size = 0;  
+}
     
-    return curNode != null; // return true if curNode is not null, return false if curNode == null
-  }
-  
-
-  /**
-   * Removes a key-value pair based on the specified key. Returns the value of the node if it exists.
-   * Returns null if node does not exist.
-   * 
-   * @return HashNode containing the key-value pair, null otherwise
-   */
-  @Override
-  public ValueType remove(KeyType key) {
-    HashNode<KeyType, ValueType> curNode = loopToNode(key); // get current node
-    
-    if (curNode == null || curNode.getKey() == null || curNode.getValue() == null) {
-      return null;
+    public int size() {
+        return size;
     }
     
-    ValueType nodeVal = curNode.getValue(); // get value of key
-    
-    int hashIndex = calcHashIndex(key);
-    if (table[hashIndex].removeFirstOccurrence(curNode)) {
-      return nodeVal;
+    public int capacity() {
+        return capacity;
     }
-      
-    return null;
-  }
-
-  /**
-   * Clears every data element within the table. Sets table to a blank array of LinkedLists.
-   */
-  @Override
-  public void clear() {
-    int curCapacity = table.length;
     
-    table = new LinkedList[curCapacity];
-  }
-  
-  /**
-   * Increments a node after a duplicate occurrence has been found in file.
-   * 
-   * @return The new number of occurrences of a word
-   */
-  public int incrementNode() {
-    return 0;
-  }
-  
-  
-  /**
-   * Prints all key-value pairs in this format: key : "Number of occurrences " + value
-   * 
-   */
-  public void printContents() {
+    public LinkedList<HashPair<KeyType,ValueType>>[] hashTable(){
+        return hashTable;
+    }
     
-  }
-  
 }
